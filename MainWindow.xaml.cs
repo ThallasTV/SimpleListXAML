@@ -24,11 +24,11 @@ namespace SimpleListWinUI
     /// <summary>
     /// An empty window that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainWindow : Window
+    public sealed partial class MainPage : Page
     {
         private List<string> simpleList = new List<string>();
         private readonly string myListFileLocation = Path.Combine(ApplicationData.Current.LocalFolder.Path, "simpleList.txt");
-        public MainWindow()
+        public MainPage()
         {
             this.InitializeComponent();
             LoadTasksFromFile();
@@ -101,5 +101,20 @@ namespace SimpleListWinUI
             SaveTasksToFile();
         }
 
+        private void Task_Checked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            var task = checkBox.Content.ToString();
+            
+            //int index = (int)checkBox.Tag;
+            //simpleList[index] = simpleList[index].Insert(0, "? ");
+            //RefreshList();
+        }
+
+        private void Task_Unchecked(object sender, RoutedEventArgs e)
+        {
+            CheckBox checkBox = (CheckBox)sender;
+            var task = checkBox.Content.ToString();
+        }
     }
 }
