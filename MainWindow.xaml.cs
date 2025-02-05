@@ -15,6 +15,7 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using System.Collections.ObjectModel;
+using SimpleListWinUI.Controllers;
 
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
@@ -26,55 +27,18 @@ namespace SimpleListWinUI
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        private List<string> simpleList = new List<string>();
-        private readonly string myListFileLocation = Path.Combine(ApplicationData.Current.LocalFolder.Path, "simpleList.txt");
+        private TaskController TaskController = new TaskController();
+
         public MainPage()
         {
             this.InitializeComponent();
-            LoadTasksFromFile();
-        }
-
-        private void LoadTasksFromFile()
-        {
-            Debug.WriteLine($"File path: {myListFileLocation}");
-            
-            if (File.Exists(myListFileLocation))
-            {
-                simpleList.Clear();
-                if (File.Exists(myListFileLocation))
-                {
-                    simpleList = File.ReadAllLines(myListFileLocation).ToList();
-                    RefreshList();
-                }
-                
-                Debug.WriteLine($"Tasks loaded: {simpleList.Count}");
-            }
+            RefreshList();
         }
 
         private void RefreshList()
         {
             ListViewTask.ItemsSource = null;
-            ListViewTask.ItemsSource = simpleList;
-        }
-
-        private void SaveTasksToFile()
-        {
-            try
-            {
-
-                //using (StreamWriter writer = new StreamWriter(myListFileLocation, true))
-                //{
-                //    foreach (var task in simpleList)
-                //        writer.WriteLine(task);
-                //}
-                Debug.WriteLine($"Saving tasks: {string.Join(", ", simpleList)}");
-                File.WriteAllLines(myListFileLocation, simpleList);
-                Debug.WriteLine("Tasks saved successfully.");
-            }
-            catch (Exception ex)
-            {
-                Debug.Write($"Error saving tasks: {ex.Message}");
-            }
+            ListViewTask.ItemsSource = TaskController.Tasks;
         }
 
         private void AddTask_Click(object sender, RoutedEventArgs e)
@@ -82,7 +46,7 @@ namespace SimpleListWinUI
             if (!string.IsNullOrWhiteSpace(InputTask.Text))
             {
                 
-                simpleList.Add(InputTask.Text.Trim());
+                TaskController.AddTask(InputTask.Text);
                 InputTask.Text = string.Empty;
                 RefreshList();
                 
@@ -92,13 +56,13 @@ namespace SimpleListWinUI
         {
             if (ListViewTask.SelectedIndex >= 0)
             {
-                simpleList.RemoveAt(ListViewTask.SelectedIndex);
+                TaskController.RemoveTask(ListViewTask.SelectedIndex);
                 RefreshList();
             }
         }
         private void SaveTasks_Click(object sender, RoutedEventArgs e)
         {
-            SaveTasksToFile();
+            TaskController.SaveTasksToFile();
         }
 
         private void Task_Checked(object sender, RoutedEventArgs e)

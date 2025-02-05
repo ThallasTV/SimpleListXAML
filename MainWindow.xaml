@@ -81,12 +81,12 @@
                 <Button Click="RemoveTask_Click" Content="Remove Task" HorizontalAlignment="Center" VerticalAlignment="Stretch"/>
                 <Button Click="SaveTasks_Click" Content="Save Task" HorizontalAlignment="Right"/>
             </StackPanel>
-            <ListView x:Name="ListViewTask" Height="200" SelectionMode="Single">
+            <ListView x:Name="ListViewTask" DisplayMemberPath="TaskDescription" Height="200" SelectionMode="Single">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Spacing="10">
                             <CheckBox Content="{Binding}" Checked="Task_Checked" Unchecked="Task_Unchecked"/>
-                            <!--<TextBlock Text="{Binding}" VerticalAlignment="Center"/>-->
+                            <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DataTemplate>
                 </ListView.ItemTemplate>
